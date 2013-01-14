@@ -12,9 +12,11 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    DataPoint.cpp
+    DataPoint.cpp \
+    heatmap.cpp
 
 HEADERS  += mainwindow.h \
-    DataPoint.h
+    DataPoint.h \
+    heatmap.h
 
 FORMS    += mainwindow.ui
