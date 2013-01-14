@@ -11,8 +11,10 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    DataPoint.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    DataPoint.h
 
 FORMS    += mainwindow.ui
