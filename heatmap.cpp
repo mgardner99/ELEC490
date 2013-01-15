@@ -1,27 +1,46 @@
 #include "heatmap.h"
 
 void HeatMap::genMap(vector<DataPoint> vec){
-    //int min = 0;
-    int max = 0;
+    float max = 0;
     float data[img->size().width()][img->size().height()];
 
+    //init the data array
+    for(int i =0; i < img->size().width(); i++){
+        for (int j = 0; j < img->size().height(); j++){
+            data[i][j] = 0;
+        }
+    }
+
+    float radius[vec.size()];
+
+    for (int i = 0; i < vec.size(); i++){
+        radius[i] = RADC*vec[i].getVal();
+        //R = Px * C
+    }
+
+    //calc all the pixel data values
     for(int i = 0; i < img->size().width(); i++){
         for (int j = 0; j< img->size().height(); j++){
             for(int k = 0; k < vec.size(); k++){ //vector loop
                 float dist = vec[k].getDist(i,j);
-                data[i][j] = dist;
+                float numer = radius[k] - dist;
 
-                if(dist > max)
-                    max = dist;
+                if(numer > 0){
+                    data[i][j] += vec[k].getVal()*(numer/radius[k]);
+                    //Px*(R-D)/R
+                }
+
+                if(data[i][j] > max){
+                    max = data[i][j];
+                }
             }
-            //QColor c((i/(float)img->size().width()*255),(i/(float)img->size().width()*255),(i/(float)img->size().width()*255));
-            //img->setPixel(i,j,c.rgb());
         }
     }
 
+    //normalize and draw the data
     for(int i = 0; i < img->size().width(); i++){
         for (int j = 0; j< img->size().height(); j++){
-            QColor c(data[i][j]/(float)max*255,data[i][j]/(float)max*255,data[i][j]/(float)max*255);
+            QColor c(255-data[i][j]/max*255,255-data[i][j]/max*255,255-data[i][j]/max*255);
             img->setPixel(i,j,c.rgb());
         }
     }

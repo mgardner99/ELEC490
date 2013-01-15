@@ -15,7 +15,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QGraphicsScene *scene = new QGraphicsScene(); //create empty scene
     HeatMap m(QSize(400,400),QImage::Format_RGB32);
     vector<DataPoint> vec;
-    vec.push_back(DataPoint(QPoint(200,200),0));
+    vec.push_back(DataPoint(QPoint(150,150),10));
+    vec.push_back(DataPoint(QPoint(250,250),10));
     m.genMap(vec);
     //Creates a gradient in grayscale (this was for experimental purposes)
 
