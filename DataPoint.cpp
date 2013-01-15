@@ -37,3 +37,7 @@ void DataPoint::setLocation(QPoint p){
 void DataPoint::setVal(float v){
     val = v;
 }
+
+float DataPoint::getDist(int x, int y){
+    return qSqrt(qPow(y-location.y(),2)+qPow(x-location.x(),2));
+}
