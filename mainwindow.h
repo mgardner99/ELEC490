@@ -1,3 +1,13 @@
+/*
+  Joey Frohlinger
+  for ELEC 490
+  Group Members:    Bren Piper
+                    Adam Bunn
+                    Joey Frohlinger
+  Supervisor:       Dr. Evelyn Morin
+
+  */
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -27,6 +37,7 @@ private:
     vector<DataPoint> vec;
     QPixmap pix;
     QGraphicsScene *scene;
+    QGraphicsItem* pixItem;
 
  private slots:
     void update();

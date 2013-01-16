@@ -1,3 +1,13 @@
+/*
+  Joey Frohlinger
+  for ELEC 490
+  Group Members:    Bren Piper
+                    Adam Bunn
+                    Joey Frohlinger
+  Supervisor:       Dr. Evelyn Morin
+
+  */
+
 #ifndef DATAPOINT_H
 #define DATAPOINT_H
 
