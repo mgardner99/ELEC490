@@ -60,14 +60,16 @@ void HeatMap::genMap2(vector<DataPoint> vec){
         //R = Px * C
     }
 
+
+    QPen g_pen(QColor(0, 0, 0, 0));
+    g_pen.setWidth(0);
+    paint.setPen(g_pen);
     for (int i = 0; i < vec.size(); i++){
-        QPen g_pen(QColor(0, 0, 0, 0));
-        g_pen.setWidth(0);
+
         QRadialGradient grad(vec[i].getLocation(), radius[i]); // Create Gradient
         grad.setColorAt(0, QColor(0, 0, 0, 255)); // Black, varying alpha
         grad.setColorAt(1, QColor(0, 0, 0, 0)); // Black, completely transparent
         QBrush g_brush(grad); // Gradient QBrush
-        paint.setPen(g_pen);
         paint.setBrush(g_brush);
         paint.drawEllipse(vec[i].getLocation().x() - radius[i],vec[i].getLocation().y() - radius[i],2*radius[i],2*radius[i]);
     }
