@@ -19,6 +19,7 @@
 #include <QTimer>
 #include <QWidget>
 #include <QPainter>
+#include <QRect>
 
 using namespace std;
 
@@ -31,6 +32,7 @@ public:
     void genMap(vector<DataPoint> vec);
     void update();
     static const float RADC = 10; //fudge factor for pressure algorithm
+    void applyMask(const QImage &mask);
 
 private:
 

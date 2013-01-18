@@ -19,15 +19,15 @@ MainWindow::MainWindow(QWidget *parent) :
     m(QSize(400,400),QImage::Format_RGB32)//constructor for heatmap
 {
     ui->setupUi(this);
-
+    fudger = .5; //remove me when when you have real data
     //timer based interrupt for screen rendering
     QTimer* timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
     timer->start(1000/60); //60 hz frame rate (or so)
-
+    footMask.load("c:/footMask.png");
     scene = new QGraphicsScene(); //create empty scene
 
-    vec.push_back(DataPoint(QPoint(150,150),11)); //remove these when you have actual data
+    vec.push_back(DataPoint(QPoint(150,150),10)); //remove these when you have actual data
     vec.push_back(DataPoint(QPoint(250,250),10));
 
     m.genMap(vec);
@@ -44,11 +44,23 @@ MainWindow::MainWindow(QWidget *parent) :
 
 //update called from timer thread to lock frame rate
 void MainWindow::update(){
-    vec[0].setVal((int)(vec[0].getVal()+1)%11); //remove this when you have actual data
+
+
+    if(vec[0].getVal() >= 10 || vec[0].getVal() <= 0){
+            fudger = -fudger;
+    }
+
+    vec[0].setVal((vec[0].getVal()+fudger)); //remove this when you have actual data
+
+
     m.genMap(vec);
+    cout<<footMask.isNull()<<endl;
+    m.applyMask(footMask);
     scene->removeItem(pixItem);
     delete pixItem; //memory leak fix (What what!)
     pix = QPixmap::fromImage(m);
+
+
     pixItem = scene->addPixmap(pix);
 }
 

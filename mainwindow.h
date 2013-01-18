@@ -38,6 +38,8 @@ private:
     QPixmap pix;
     QGraphicsScene *scene;
     QGraphicsItem* pixItem;
+    float fudger;
+    QImage footMask;
 
  private slots:
     void update();

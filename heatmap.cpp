@@ -40,8 +40,23 @@ void HeatMap::genMap(vector<DataPoint> vec){
         paint.setBrush(g_brush);
         paint.drawEllipse(vec[i].getLocation().x() - radius[i],vec[i].getLocation().y() - radius[i],2*radius[i],2*radius[i]);
     }
+
+    //colorize
+    QColor heat;
+    for (int i  = 0; i < size().width(); i ++){
+        for ( int j = 0; j < size().height(); j++){
+            heat.setRgb(pixel(i,j));
+            heat.setHsv(heat.red(),200,200);
+            setPixel(i,j,heat.rgb());
+        }
+    }
 }
 
+void HeatMap::applyMask(const QImage &mask){
+    QPainter paint(this);
+    QRect targ(0,0,size().width(),size().height());
+    paint.drawImage(targ,mask,targ);
+}
 
 void HeatMap::update(){
 
