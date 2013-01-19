@@ -10,6 +10,11 @@
 
 #include "DataPoint.h"
 
+DataPoint::DataPoint(){
+    val = 0;
+    location = QPoint(0,0);
+}
+
 DataPoint::DataPoint(int x, int y, float v){
     DataPoint(QPoint(x,y),v);
 }

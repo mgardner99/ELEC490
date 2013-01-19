@@ -13,10 +13,17 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     DataPoint.cpp \
-    heatmap.cpp
+    heatmap.cpp \
+    Communications.cpp
 
 HEADERS  += mainwindow.h \
     DataPoint.h \
-    heatmap.h
+    heatmap.h \
+    Communication.h
+
+INCLUDEPATH += "C:\boost_1_52_0"
+
+LIBS += "C:\boost_1_52_0\stage\lib\libboost_system-mgw46-mt-d-1_52.a"
+LIBS += "C:\MinGW\lib\libws2_32.a"
 
 FORMS    += mainwindow.ui

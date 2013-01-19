@@ -15,6 +15,7 @@
 #include <QtCore/qmath.h>
 class DataPoint{
 public:
+    DataPoint();
     DataPoint(QPoint l, float v);
     DataPoint(int x, int y, float v);
 

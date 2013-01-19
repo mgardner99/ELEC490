@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     m(QSize(400,400),QImage::Format_RGB32)//constructor for heatmap
+
 {
     ui->setupUi(this);
     fudger = .5; //remove me when when you have real data
@@ -24,13 +25,20 @@ MainWindow::MainWindow(QWidget *parent) :
     QTimer* timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
     timer->start(1000/60); //60 hz frame rate (or so)
+
+    comm = new Communication("COM11");
+    QTimer* timer2 = new QTimer(this);
+    connect(timer2, SIGNAL(timeout()), this, SLOT( commUpdate() ));
+    timer2->start(100);
     footMask.load("c:/footMask.png");
     scene = new QGraphicsScene(); //create empty scene
 
-    vec.push_back(DataPoint(QPoint(150,150),10)); //remove these when you have actual data
-    vec.push_back(DataPoint(QPoint(250,250),10));
 
-    m.genMap(vec);
+    vec = new vector<DataPoint>();
+    vec->push_back(DataPoint(QPoint(150,150),10)); //remove these when you have actual data
+    vec->push_back(DataPoint(QPoint(250,250),10));
+
+    m.genMap(*vec);
     //Creates a gradient in grayscale (this was for experimental purposes)
 
 
@@ -46,22 +54,23 @@ MainWindow::MainWindow(QWidget *parent) :
 void MainWindow::update(){
 
 
-    if(vec[0].getVal() >= 10 || vec[0].getVal() <= 0){
+    if(vec->at(0).getVal() >= 10 || vec->at(0).getVal() <= 0){
             fudger = -fudger;
     }
 
-    vec[0].setVal((vec[0].getVal()+fudger)); //remove this when you have actual data
+    vec->at(0).setVal((vec->at(0).getVal()+fudger)); //remove this when you have actual data
 
 
-    m.genMap(vec);
-    cout<<footMask.isNull()<<endl;
+    m.genMap(*vec);
     m.applyMask(footMask);
     scene->removeItem(pixItem);
     delete pixItem; //memory leak fix (What what!)
     pix = QPixmap::fromImage(m);
-
-
     pixItem = scene->addPixmap(pix);
+}
+
+void MainWindow::commUpdate(){
+    comm->update();
 }
 
 MainWindow::~MainWindow()

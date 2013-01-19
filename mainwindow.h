@@ -17,6 +17,7 @@
 #include <iostream>
 #include <QTimer>
 #include "DataPoint.h"
+#include "Communication.h"
 
 namespace Ui {
 class MainWindow;
@@ -34,15 +35,18 @@ public:
 private:
     Ui::MainWindow *ui;
     HeatMap m;
-    vector<DataPoint> vec;
+    vector<DataPoint>* vec;
     QPixmap pix;
     QGraphicsScene *scene;
     QGraphicsItem* pixItem;
     float fudger;
     QImage footMask;
 
+    Communication* comm;
+
  private slots:
     void update();
+    void commUpdate();
 };
 
 #endif // MAINWINDOW_H
