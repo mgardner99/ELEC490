@@ -31,7 +31,7 @@ public:
     //QImage getImg();
     void genMap(vector<DataPoint> vec);
     void update();
-    static const float RADC = 10; //fudge factor for pressure algorithm
+    static const float RADC = 1; //fudge factor for pressure algorithm
     void applyMask(const QImage &mask);
 
 private:

@@ -15,15 +15,15 @@ DataPoint::DataPoint(){
     location = QPoint(0,0);
 }
 
-DataPoint::DataPoint(int x, int y, float v){
+DataPoint::DataPoint(int x, int y, qint16 v){
     DataPoint(QPoint(x,y),v);
 }
-DataPoint::DataPoint(QPoint l, float v){
+DataPoint::DataPoint(QPoint l, qint16 v){
     setLocation(l);
     setVal(v);
 }
 
-float DataPoint::getVal(){
+qint16 DataPoint::getVal(){
     return val;
 }
 
@@ -49,7 +49,7 @@ void DataPoint::setLocation(QPoint p){
 }
 
 //should probably add some error checking here
-void DataPoint::setVal(float v){
+void DataPoint::setVal(qint16 v){
     val = v;
 }
 

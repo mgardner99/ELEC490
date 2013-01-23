@@ -16,16 +16,16 @@
 class DataPoint{
 public:
     DataPoint();
-    DataPoint(QPoint l, float v);
-    DataPoint(int x, int y, float v);
+    DataPoint(QPoint l, qint16 v);
+    DataPoint(int x, int y, qint16 v);
 
-    float getVal();
+    qint16 getVal();
     QPoint getLocation();
 
     int getX();
     int getY();
 
-    void setVal(float v);
+    void setVal(qint16 v);
     void setLocation(QPoint p);
     void setLocation(int x, int y);
 
@@ -33,7 +33,7 @@ public:
 
 private:
     QPoint location;
-    float val;
+    qint16 val;
 };
 
 #endif // DATAPOINT_H
