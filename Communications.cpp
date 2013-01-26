@@ -17,39 +17,43 @@ QStringList Communication::getPortsList(){
             ports << portName.str().c_str();
         }
         catch(...){
+
         }
     }
     return ports;
 }
+Communication::~Communication(){
+
+    port->close();
+    delete port;
+    io->stop();
+    delete io;
+
+    delete data;
+}
 
 Communication::Communication(string comPort): q(){
-    // cout<<"here"<<endl;
     mutex = false;
 
     io = new io_service();
     port = new serial_port(*io,comPort);
-
-
-
     port->set_option(serial_port_base::baud_rate(9600));
-    data = new vector<DataPoint>();
 
-    data->push_back(DataPoint(QPoint(150,150),10)); //remove these when you have actual data
-    data->push_back(DataPoint(QPoint(250,250),10));
+    data = new vector<DataPoint>();
+    data->push_back(DataPoint(QPoint(150,150),0)); //remove these when you have actual data
+    data->push_back(DataPoint(QPoint(250,250),0));
     for(int i  = 0; i < 4; i++)
         data->push_back(DataPoint());
 }
 
 void Communication::update(){
-    //   cout<<"update"<<endl;
     if(mutex == true)
         return; //mutex WOOT
     mutex = true;
+
     readData();
-    //    int temp;
+
     int fudgeFix = 0;
-
-
     while(!q.empty()){
 
         switch (q.front()){
@@ -70,16 +74,13 @@ void Communication::update(){
             break;
         }
     }
-
-    //valNum = 0;
     mutex = false;
 }
 
 void Communication::dataSet(int sense){
-    //  cout<<"dataSet " <<sense<<endl;
     stringstream ss;
-    q.pop();
 
+    q.pop();
     while(q.front() != 'z'){ // 'z' is the end packet footer
         if(q.size() == 0)
             return;
@@ -90,20 +91,23 @@ void Communication::dataSet(int sense){
             return;
     }
     q.pop();
-    cout<<ss.str()<<endl;
+  //  cout<<ss.str()<<endl;
     if(ss.rdbuf()->in_avail()>0)
         data->at(sense).setVal(atoi(ss.str().c_str()));
 }
 
 //fairly convoluted way of reading the incoming datastream from the arduino... YAY
 void Communication::readData(){
-
-    //   cout<<"Read data"<<endl;
     static int read = 0;
     static int size = 0;
-    size = port->read_some(buffer(msg,512));
 
-    //  cout<<"Read "<<size<<" bytes"<<endl;
+    try{
+        size = port->read_some(buffer(msg,512));
+    }
+    catch(...){
+        //fixes a crash where if the thread terminates the program dies
+    }
+
     read += size;
 
     for(int i = 0; i < size; i++){
@@ -127,6 +131,5 @@ void Communication::readData(){
 }
 
 vector<DataPoint>* Communication::getData(){
-    // cout<<"getData"<<endl;
     return data;
 }

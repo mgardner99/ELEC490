@@ -12,10 +12,12 @@
 using namespace std;
 using namespace boost::asio;
 
-class Communication{
+class Communication: public QObject{
+    Q_OBJECT
 public:
     Communication(string comPort);
-    void update();
+    ~Communication();
+
     vector<DataPoint>* getData();
     static QStringList getPortsList();
 
@@ -31,6 +33,8 @@ private:
     void dataSet(int sense);
     bool mutex;
 
+public slots:
+    void update();
 
 };
 

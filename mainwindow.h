@@ -19,6 +19,8 @@
 #include "DataPoint.h"
 #include "Communication.h"
 
+#include <QThread>
+
 namespace Ui {
 class MainWindow;
 }
@@ -41,14 +43,15 @@ private:
     QGraphicsItem* pixItem;
     float fudger;
     QImage footMask;
-
+    QThread* commThread;
     Communication* comm;
+
 
     void uiInit();
 
  private slots:
     void update();
-    void commUpdate();
+    void on_comPortBox_currentIndexChanged(const QString &arg1);
 };
 
 #endif // MAINWINDOW_H

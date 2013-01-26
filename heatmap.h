@@ -28,7 +28,6 @@ class HeatMap: public QImage
 
 public:
     HeatMap(QSize size, QImage::Format form);
-    //QImage getImg();
     void genMap(vector<DataPoint> vec);
     void update();
     static const float RADC = 1; //fudge factor for pressure algorithm
