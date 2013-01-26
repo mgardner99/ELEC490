@@ -3,7 +3,7 @@
 #include "Communication.h"
 
 Communication::Communication(string comPort): q(){
-   // cout<<"here"<<endl;
+    // cout<<"here"<<endl;
     mutex = false;
     io = new io_service();
     port = new serial_port(*io,comPort);
@@ -20,23 +20,31 @@ Communication::Communication(string comPort): q(){
 }
 
 void Communication::update(){
+    cout<<"update"<<endl;
     if(mutex == true)
         return; //mutex WOOT
     mutex = true;
     readData();
-//    int temp;
+    //    int temp;
+    int fudgeFix = 0;
     while(!q.empty()){
 
 
         switch (q.front()){
-       case 'a': dataSet(0);
-           break;
-       case 'b': dataSet(1);
-           break;
-       default: q.pop();
-           break;
+        case 'a': dataSet(0);
+            break;
+        case 'b': dataSet(1);
+            break;
+        default: q.pop();
+            break;
         }
-
+        fudgeFix++;
+        if (fudgeFix > 12){
+            int qsz = q.size();
+            for(int i = 0; i < qsz; i++)
+                q.pop();
+            break;
+        }
     }
 
     valNum = 0;
@@ -44,29 +52,34 @@ void Communication::update(){
 }
 
 void Communication::dataSet(int sense){
-   stringstream ss;
-   q.pop();
-   while(q.front() != 'e'){
-       if(q.size() == 0)
-           return;
+    cout<<"dataSet " <<sense<<endl;
+    stringstream ss;
+    q.pop();
 
-       ss<<q.front();
-       q.pop();
+    while(q.front() != 'e'){
+        if(q.size() == 0)
+            return;
 
-   }
-   q.pop();
-   //cout<<ss.str()<<endl;
-
-   data->at(sense).setVal(atoi(ss.str().c_str()));
+        ss<<q.front();
+        q.pop();
+        if(q.size() == 0)
+            return;
+    }
+    q.pop();
+    cout<<ss.str()<<endl;
+    if(ss.rdbuf()->in_avail()>0)
+        data->at(sense).setVal(atoi(ss.str().c_str()));
 }
 
 //fairly convoluted way of reading the incoming datastream from the arduino... YAY
 void Communication::readData(){
+
+    cout<<"Read data"<<endl;
     static int read = 0;
     static int size = 0;
     size = port->read_some(buffer(msg,512));
 
-    //cout<<"Read "<<size<<" bytes"<<endl;
+    cout<<"Read "<<size<<" bytes"<<endl;
     read += size;
 
     for(int i = 0; i < size; i++){
@@ -77,9 +90,10 @@ void Communication::readData(){
         for (int i = 0; i < q.size(); i++)
             q.pop();
         read = 0;
-        return;
         cout<<"Over Flow"<<endl;
+        return;
     }
+
     if(read % 3 !=0)
         readData(); //2 byte int from arduino... so if we do not have an even number of read bytes, we have only half an int
     else{
@@ -89,5 +103,6 @@ void Communication::readData(){
 }
 
 vector<DataPoint>* Communication::getData(){
+    cout<<"getData"<<endl;
     return data;
 }

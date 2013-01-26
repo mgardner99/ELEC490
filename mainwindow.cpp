@@ -36,8 +36,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     vec = new vector<DataPoint>();
-    vec->push_back(DataPoint(QPoint(150,150),10)); //remove these when you have actual data
-    vec->push_back(DataPoint(QPoint(250,250),10));
+    vec->push_back(DataPoint(QPoint(150,150),0)); //remove these when you have actual data
+    vec->push_back(DataPoint(QPoint(250,250),0));
 
     m.genMap(*vec);
     //Creates a gradient in grayscale (this was for experimental purposes)
