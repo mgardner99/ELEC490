@@ -44,6 +44,8 @@ private:
 
     Communication* comm;
 
+    void uiInit();
+
  private slots:
     void update();
     void commUpdate();

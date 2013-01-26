@@ -7,6 +7,7 @@
 #include "DataPoint.h"
 #include <queue>
 #include <sstream>
+#include <QStringList>
 
 using namespace std;
 using namespace boost::asio;
@@ -16,6 +17,7 @@ public:
     Communication(string comPort);
     void update();
     vector<DataPoint>* getData();
+    static QStringList getPortsList();
 
 private:
     serial_port* port;

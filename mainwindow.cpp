@@ -20,6 +20,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 {
     ui->setupUi(this);
+
+    uiInit();
     fudger = 1; //remove me when when you have real data
     //timer based interrupt for screen rendering
     QTimer* timer = new QTimer(this);
@@ -73,6 +75,10 @@ void MainWindow::update(){
 void MainWindow::commUpdate(){
     comm->update();
     vec = comm->getData();
+}
+
+void MainWindow::uiInit(){
+    ui->comPortBox->addItems(Communication::getPortsList());
 }
 
 MainWindow::~MainWindow()

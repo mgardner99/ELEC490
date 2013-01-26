@@ -2,9 +2,30 @@
 
 #include "Communication.h"
 
+//note there is a lot of name hiding in this method... dont get confused
+//static!
+QStringList Communication::getPortsList(){
+    io_service io;
+    QStringList ports;
+
+    for(int i = 0; i < 20; i++){
+        try{
+            stringstream portName;
+            portName<<"COM"<<i;
+            serial_port port(io,portName.str());
+            port.close();
+            ports << portName.str().c_str();
+        }
+        catch(...){
+        }
+    }
+    return ports;
+}
+
 Communication::Communication(string comPort): q(){
     // cout<<"here"<<endl;
     mutex = false;
+
     io = new io_service();
     port = new serial_port(*io,comPort);
 
@@ -20,7 +41,7 @@ Communication::Communication(string comPort): q(){
 }
 
 void Communication::update(){
- //   cout<<"update"<<endl;
+    //   cout<<"update"<<endl;
     if(mutex == true)
         return; //mutex WOOT
     mutex = true;
@@ -55,7 +76,7 @@ void Communication::update(){
 }
 
 void Communication::dataSet(int sense){
-  //  cout<<"dataSet " <<sense<<endl;
+    //  cout<<"dataSet " <<sense<<endl;
     stringstream ss;
     q.pop();
 
@@ -77,12 +98,12 @@ void Communication::dataSet(int sense){
 //fairly convoluted way of reading the incoming datastream from the arduino... YAY
 void Communication::readData(){
 
- //   cout<<"Read data"<<endl;
+    //   cout<<"Read data"<<endl;
     static int read = 0;
     static int size = 0;
     size = port->read_some(buffer(msg,512));
 
-  //  cout<<"Read "<<size<<" bytes"<<endl;
+    //  cout<<"Read "<<size<<" bytes"<<endl;
     read += size;
 
     for(int i = 0; i < size; i++){
@@ -100,12 +121,12 @@ void Communication::readData(){
     if(read % 6 != 0) //data will be a 6 byte packet
         readData();
     else{
-    //    valNum = read / 3;
+        //    valNum = read / 3;
         read = 0;
     }
 }
 
 vector<DataPoint>* Communication::getData(){
-   // cout<<"getData"<<endl;
+    // cout<<"getData"<<endl;
     return data;
 }
