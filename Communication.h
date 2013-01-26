@@ -23,7 +23,7 @@ private:
     char msg[512];
     vector<DataPoint>* data;
     queue<char> q;
-    int valNum;
+   // int valNum;
 
     void readData();
     void dataSet(int sense);

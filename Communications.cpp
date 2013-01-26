@@ -20,15 +20,16 @@ Communication::Communication(string comPort): q(){
 }
 
 void Communication::update(){
-    cout<<"update"<<endl;
+ //   cout<<"update"<<endl;
     if(mutex == true)
         return; //mutex WOOT
     mutex = true;
     readData();
     //    int temp;
     int fudgeFix = 0;
-    while(!q.empty()){
 
+
+    while(!q.empty()){
 
         switch (q.front()){
         case 'a': dataSet(0);
@@ -38,25 +39,27 @@ void Communication::update(){
         default: q.pop();
             break;
         }
+
         fudgeFix++;
         if (fudgeFix > 12){
             int qsz = q.size();
             for(int i = 0; i < qsz; i++)
                 q.pop();
+            mutex = false;
             break;
         }
     }
 
-    valNum = 0;
+    //valNum = 0;
     mutex = false;
 }
 
 void Communication::dataSet(int sense){
-    cout<<"dataSet " <<sense<<endl;
+  //  cout<<"dataSet " <<sense<<endl;
     stringstream ss;
     q.pop();
 
-    while(q.front() != 'e'){
+    while(q.front() != 'z'){ // 'z' is the end packet footer
         if(q.size() == 0)
             return;
 
@@ -74,19 +77,19 @@ void Communication::dataSet(int sense){
 //fairly convoluted way of reading the incoming datastream from the arduino... YAY
 void Communication::readData(){
 
-    cout<<"Read data"<<endl;
+ //   cout<<"Read data"<<endl;
     static int read = 0;
     static int size = 0;
     size = port->read_some(buffer(msg,512));
 
-    cout<<"Read "<<size<<" bytes"<<endl;
+  //  cout<<"Read "<<size<<" bytes"<<endl;
     read += size;
 
     for(int i = 0; i < size; i++){
         q.push(msg[i]);
     }
 
-    if(read > 12){
+    if(read > 100){
         for (int i = 0; i < q.size(); i++)
             q.pop();
         read = 0;
@@ -94,15 +97,15 @@ void Communication::readData(){
         return;
     }
 
-    if(read % 3 !=0)
-        readData(); //2 byte int from arduino... so if we do not have an even number of read bytes, we have only half an int
+    if(read % 6 != 0) //data will be a 6 byte packet
+        readData();
     else{
-        valNum = read / 3;
+    //    valNum = read / 3;
         read = 0;
     }
 }
 
 vector<DataPoint>* Communication::getData(){
-    cout<<"getData"<<endl;
+   // cout<<"getData"<<endl;
     return data;
 }

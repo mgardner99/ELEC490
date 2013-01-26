@@ -21,9 +21,12 @@ HEADERS  += mainwindow.h \
     heatmap.h \
     Communication.h
 
-INCLUDEPATH += "C:\boost_1_52_0"
+INCLUDEPATH += "D:/boost_1_52_0/boost_1_52_0"
+INCLUDEPATH += "D:\Qt\4.8.3\include\QtCore"
+INCLUDEPATH += "D:\Qt\4.8.3\include"
 
-LIBS += "C:\boost_1_52_0\stage\lib\libboost_system-mgw46-mt-d-1_52.a"
+
+LIBS += "D:\boost_1_52_0\boost_1_52_0\stage\lib\libboost_system-mgw46-mt-1_52.a"
 LIBS += "C:\MinGW\lib\libws2_32.a"
 
 FORMS    += mainwindow.ui

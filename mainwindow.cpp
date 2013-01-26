@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
     timer->start(1000/60); //60 hz frame rate (or so)
 
-    comm = new Communication("COM5");
+    comm = new Communication("COM13");
     QTimer* timer2 = new QTimer(this);
     connect(timer2, SIGNAL(timeout()), this, SLOT( commUpdate() ));
     timer2->start(100);
