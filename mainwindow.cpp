@@ -20,6 +20,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
 {
     ui->setupUi(this);
+
+    QGridLayout *grid = new QGridLayout(ui->vidWidget);
+    grid->setSpacing(20);
+    vidPlayer = new Phonon::VideoPlayer(Phonon::VideoCategory, ui->vidWidget);
+    grid->addWidget(vidPlayer,1,0,3,1);
+    // vidPlayer->load(Phonon::MediaSource("D:/Torrents/Entourage.S01.DVDRip.XviD-TBS-LOKi/test.avi"));
+    vidLoaded = false;
+
     comm = 0;
     commThread = new QThread(this);
     uiInit();//this function is to initialize the data in the UI (boxes etc)
@@ -33,6 +41,12 @@ MainWindow::MainWindow(QWidget *parent) :
     QTimer* timer2 = new QTimer(this);
     connect(timer2, SIGNAL(timeout()), commThread, SLOT(start()));
     timer2->start(100);
+
+    //timer for video ticker
+    QTimer* timer3 = new QTimer(this);
+    connect(timer3, SIGNAL(timeout()), this, SLOT(vidTime()));
+    timer3->start(10);
+
 
     footMask.load("c:/footMask.png");
     scene = new QGraphicsScene(); //create empty scene
@@ -54,7 +68,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //update called from timer thread to lock frame rate
 void MainWindow::update(){
     m.genMap(*vec);
-   // m.applyMask(footMask);
+    // m.applyMask(footMask);
     scene->removeItem(pixItem);
     delete pixItem; //memory leak fix (What what!)
     pix = QPixmap::fromImage(m);
@@ -81,9 +95,58 @@ void MainWindow::on_comPortBox_currentIndexChanged(const QString &arg1)
         comm = 0;
     }
     cout<<"Called"<<arg1.toStdString()<<endl;
-   comm = new Communication(arg1.toStdString());
-   comm->moveToThread(commThread);
-   connect(commThread, SIGNAL(started()), comm, SLOT(update()));
-   commThread->start();
-   vec = comm->getData(); //pass data pointer
+    comm = new Communication(arg1.toStdString());
+    comm->moveToThread(commThread);
+    connect(commThread, SIGNAL(started()), comm, SLOT(update()));
+    commThread->start();
+    vec = comm->getData(); //pass data pointer
+}
+
+void MainWindow::on_vidPlay_clicked()
+{
+    if(!vidLoaded){
+        vidPlayer->load(Phonon::MediaSource(vidPathText));
+        vidPlayer->play();
+        vidLoaded = true;
+    }
+    else
+        vidPlayer->play();
+}
+void MainWindow::vidTime(){
+    static qint64 time;
+    static int h;
+    static int s;
+    static int m;
+    static int ms;
+
+    time = vidPlayer->currentTime(); //elapsed time in milliseconds
+    ms = time %1000;
+    s = (time/1000) % 60;
+    m = (time/60000)%60;
+    h = (time/360000);
+    QTime qtime(h,m,s,ms);
+    ui->timeEdit->setTime(qtime);
+
+    if(ui->loopBox->isChecked()){
+        if(qtime > ui->vidEndLoop->time()){
+            ms = ui->vidStartLoop->time().msec();
+            s = ui->vidStartLoop->time().second()*1000;
+            m = ui->vidStartLoop->time().minute()*60000;
+            h = ui->vidStartLoop->time().hour()*360000;
+
+            vidPlayer->seek(h+m+s+ms);
+        }
+    }
+}
+
+void MainWindow::on_vidPath_textEdited(const QString &arg1)
+{
+    vidPathText = arg1;
+    vidLoaded = false;
+}
+
+
+void MainWindow::on_vidPause_clicked()
+{
+    vidPlayer->pause();
 }

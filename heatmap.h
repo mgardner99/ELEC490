@@ -21,6 +21,7 @@
 #include <QPainter>
 #include <QRect>
 
+
 using namespace std;
 
 class HeatMap: public QImage
@@ -28,6 +29,7 @@ class HeatMap: public QImage
 
 public:
     HeatMap(QSize size, QImage::Format form);
+
     void genMap(vector<DataPoint> vec);
     void update();
     static const float RADC = 1; //fudge factor for pressure algorithm

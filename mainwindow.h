@@ -12,13 +12,15 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QWidget>
+#include <QGridLayout>
 #include "heatmap.h"
 #include <QGraphicsPixmapItem>
 #include <iostream>
 #include <QTimer>
 #include "DataPoint.h"
 #include "Communication.h"
-
+#include <phonon/phonon>
 #include <QThread>
 
 namespace Ui {
@@ -45,13 +47,21 @@ private:
     QImage footMask;
     QThread* commThread;
     Communication* comm;
-
+    Phonon::VideoPlayer *vidPlayer;
+    bool vidLoaded;
+    QString vidPathText;
 
     void uiInit();
 
  private slots:
     void update();
+    void vidTime();
     void on_comPortBox_currentIndexChanged(const QString &arg1);
+
+    void on_vidPlay_clicked();
+    void on_vidPath_textEdited(const QString &arg1);
+    void on_vidPause_clicked();
+
 };
 
 #endif // MAINWINDOW_H

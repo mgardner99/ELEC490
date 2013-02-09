@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui phonon
 
 TARGET = 490UIAPP
 TEMPLATE = app
@@ -21,12 +21,11 @@ HEADERS  += mainwindow.h \
     heatmap.h \
     Communication.h
 
-INCLUDEPATH += "D:/boost_1_52_0/boost_1_52_0"
-INCLUDEPATH += "D:\Qt\4.8.3\include\QtCore"
-INCLUDEPATH += "D:\Qt\4.8.3\include"
+INCLUDEPATH += "C:/boost_1_52_0"
 
 
-LIBS += "D:\boost_1_52_0\boost_1_52_0\stage\lib\libboost_system-mgw46-mt-1_52.a"
+
+LIBS += "c:\boost_1_52_0\stage\lib\libboost_system-mgw46-mt-1_52.a"
 LIBS += "C:\MinGW\lib\libws2_32.a"
 
 FORMS    += mainwindow.ui
