@@ -48,6 +48,7 @@ private:
     QThread* commThread;
     Communication* comm;
     Phonon::VideoPlayer *vidPlayer;
+    Phonon::SeekSlider *vidSeek;
     bool vidLoaded;
     QString vidPathText;
 

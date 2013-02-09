@@ -25,9 +25,12 @@ MainWindow::MainWindow(QWidget *parent) :
     grid->setSpacing(20);
     vidPlayer = new Phonon::VideoPlayer(Phonon::VideoCategory, ui->vidWidget);
     grid->addWidget(vidPlayer,1,0,3,1);
-    // vidPlayer->load(Phonon::MediaSource("D:/Torrents/Entourage.S01.DVDRip.XviD-TBS-LOKi/test.avi"));
     vidLoaded = false;
 
+    QGridLayout *gridS = new QGridLayout(ui->seekWidget);
+    gridS->setSpacing(20);
+    vidSeek = new Phonon::SeekSlider(vidPlayer->mediaObject(),ui->seekWidget);
+    gridS->addWidget(vidSeek,1,0,3,1);
     comm = 0;
     commThread = new QThread(this);
     uiInit();//this function is to initialize the data in the UI (boxes etc)
@@ -120,10 +123,10 @@ void MainWindow::vidTime(){
     static int ms;
 
     time = vidPlayer->currentTime(); //elapsed time in milliseconds
-    ms = time %1000;
+    ms = time%1000;
     s = (time/1000) % 60;
     m = (time/60000)%60;
-    h = (time/360000);
+    h = (time/3600000);
     QTime qtime(h,m,s,ms);
     ui->timeEdit->setTime(qtime);
 
