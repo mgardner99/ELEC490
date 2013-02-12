@@ -21,6 +21,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    leftArrow = new QShortcut(Qt::Key_Left,this, SLOT(leftArrowSlot()));
+    rightArrow = new QShortcut(Qt::Key_Right,this,SLOT(rightArrowSlot()));
+
     QGridLayout *grid = new QGridLayout(ui->vidWidget);
     grid->setSpacing(20);
     vidPlayer = new Phonon::VideoPlayer(Phonon::VideoCategory, ui->vidWidget);
@@ -152,4 +155,35 @@ void MainWindow::on_vidPath_textEdited(const QString &arg1)
 void MainWindow::on_vidPause_clicked()
 {
     vidPlayer->pause();
+}
+
+void MainWindow::on_vidPath_returnPressed()
+{
+    on_vidPlay_clicked();
+}
+
+void MainWindow::on_vidStartLoopSet_clicked()
+{
+    ui->vidStartLoop->setTime(ui->timeEdit->time());
+}
+
+void MainWindow::on_vidEndLoopSet_clicked()
+{
+    ui->vidEndLoop->setTime(ui->timeEdit->time());
+}
+
+void MainWindow::leftArrowSlot(){
+    if(!vidPlayer->isPlaying())
+    vidPlayer->seek(vidPlayer->currentTime()-33);
+}
+
+void MainWindow::rightArrowSlot(){
+    if(!vidPlayer->isPlaying())
+    vidPlayer->seek(vidPlayer->currentTime()+33);
+}
+
+void MainWindow::on_vidStop_clicked()
+{
+    vidPlayer->stop();
+    vidLoaded = false;
 }

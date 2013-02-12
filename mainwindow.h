@@ -22,6 +22,7 @@
 #include "Communication.h"
 #include <phonon/phonon>
 #include <QThread>
+#include <QShortcut>
 
 namespace Ui {
 class MainWindow;
@@ -52,6 +53,10 @@ private:
     bool vidLoaded;
     QString vidPathText;
 
+    QShortcut *leftArrow;
+    QShortcut *rightArrow;
+
+
     void uiInit();
 
  private slots:
@@ -63,6 +68,12 @@ private:
     void on_vidPath_textEdited(const QString &arg1);
     void on_vidPause_clicked();
 
+    void on_vidPath_returnPressed();
+    void on_vidStartLoopSet_clicked();
+    void on_vidEndLoopSet_clicked();
+    void leftArrowSlot();
+    void rightArrowSlot();
+    void on_vidStop_clicked();
 };
 
 #endif // MAINWINDOW_H

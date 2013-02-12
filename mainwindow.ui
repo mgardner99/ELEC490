@@ -190,14 +190,14 @@
    <widget class="QCheckBox" name="loopBox">
     <property name="geometry">
      <rect>
-      <x>240</x>
-      <y>590</y>
-      <width>71</width>
-      <height>16</height>
+      <x>150</x>
+      <y>630</y>
+      <width>16</width>
+      <height>21</height>
      </rect>
     </property>
     <property name="text">
-     <string>Loop</string>
+     <string/>
     </property>
    </widget>
    <widget class="QTimeEdit" name="timeEdit">
@@ -233,6 +233,9 @@
     </property>
    </widget>
    <widget class="QTimeEdit" name="vidStartLoop">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>230</x>
@@ -246,6 +249,9 @@
     </property>
    </widget>
    <widget class="QTimeEdit" name="vidEndLoop">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>410</x>
@@ -288,7 +294,7 @@
     <property name="geometry">
      <rect>
       <x>90</x>
-      <y>600</y>
+      <y>590</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -307,28 +313,58 @@
      </rect>
     </property>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1214</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuFile">
-    <property name="title">
-     <string>File</string>
+   <widget class="QPushButton" name="vidStartLoopSet">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>660</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Set</string>
     </property>
    </widget>
-   <widget class="QMenu" name="menuConnection">
-    <property name="title">
-     <string>Connection</string>
+   <widget class="QPushButton" name="vidEndLoopSet">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>660</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Set</string>
     </property>
    </widget>
-   <addaction name="menuFile"/>
-   <addaction name="menuConnection"/>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>630</y>
+      <width>46</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Loop:</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="vidStop">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>590</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Stop</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
