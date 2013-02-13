@@ -40,10 +40,14 @@ Communication::Communication(string comPort): q(){
     port->set_option(serial_port_base::baud_rate(9600));
 
     data = new vector<DataPoint>();
-    data->push_back(DataPoint(QPoint(150,150),0)); //remove these when you have actual data
-    data->push_back(DataPoint(QPoint(250,250),0));
-    for(int i  = 0; i < 4; i++)
-        data->push_back(DataPoint());
+    data->push_back(DataPoint(QPoint(99,65),0)); //remove these when you have actual data
+    data->push_back(DataPoint(QPoint(115,117),0));
+    data->push_back(DataPoint(QPoint(35,138),0)); //remove these when you have actual data
+    data->push_back(DataPoint(QPoint(93,274),0));
+    data->push_back(DataPoint(QPoint(47,274),0)); //remove these when you have actual data
+    data->push_back(DataPoint(QPoint(85,324),0));
+   // for(int i  = 0; i < 4; i++)
+   //     data->push_back(DataPoint());
 }
 
 void Communication::update(){
@@ -60,6 +64,14 @@ void Communication::update(){
         case 'a': dataSet(0);
             break;
         case 'b': dataSet(1);
+            break;
+        case 'c': dataSet(2);
+            break;
+        case 'd': dataSet(3);
+            break;
+        case 'e': dataSet(4);
+            break;
+        case 'f': dataSet(5);
             break;
         default: q.pop();
             break;

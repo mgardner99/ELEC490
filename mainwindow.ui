@@ -98,9 +98,9 @@
    <widget class="QGraphicsView" name="renderView">
     <property name="geometry">
      <rect>
-      <x>710</x>
+      <x>840</x>
       <y>110</y>
-      <width>400</width>
+      <width>149</width>
       <height>400</height>
      </rect>
     </property>
