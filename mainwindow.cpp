@@ -54,14 +54,14 @@ MainWindow::MainWindow(QWidget *parent) :
     timer3->start(10);
 
 
-    footMask.load("c:/footMask.png");
+    footMask.load("c:/leftFootMask.png");
     scene = new QGraphicsScene(); //create empty scene
 
 
     vec = new vector<DataPoint>();
     vec->push_back(DataPoint(QPoint(150,150),0)); //remove these when you have actual data
     vec->push_back(DataPoint(QPoint(250,250),0));
-
+    vec = comm->getData();
     m.genMap(*vec);
     scene->setSceneRect(m.rect()); //set the scene's view rectangle to the image's
     pix = QPixmap::fromImage(m); //create a pixmap from the image
@@ -74,7 +74,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //update called from timer thread to lock frame rate
 void MainWindow::update(){
     m.genMap(*vec);
-    // m.applyMask(footMask);
+    m.applyMask(footMask);
     scene->removeItem(pixItem);
     delete pixItem; //memory leak fix (What what!)
     pix = QPixmap::fromImage(m);
@@ -186,4 +186,9 @@ void MainWindow::on_vidStop_clicked()
 {
     vidPlayer->stop();
     vidLoaded = false;
+}
+
+void MainWindow::on_comPortBox_activated(const QString &arg1)
+{
+  //  on_comPortBox_currentIndexChanged(arg1);
 }

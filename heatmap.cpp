@@ -31,8 +31,10 @@ void HeatMap::genMap(vector<DataPoint> vec){
     QPen g_pen(QColor(0, 0, 0, 0));
     g_pen.setWidth(0);
     paint.setPen(g_pen);
-
+     //cout<<vec.size()<<endl;
     for (int i = 0; i < vec.size(); i++){
+
+        //cout<<vec[i].getVal()<<endl;
         QRadialGradient grad(vec[i].getLocation(), radius[i]); // Create Gradient
         grad.setColorAt(0, QColor(0, 0, 0, 255)); //This is the one I need to change when we have real data to make it relative to our formula
         grad.setColorAt(1, QColor(0, 0, 0, 0)); // Black, completely transparent

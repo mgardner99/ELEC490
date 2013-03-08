@@ -42,9 +42,9 @@ Communication::Communication(string comPort): q(){
     data = new vector<DataPoint>();
     data->push_back(DataPoint(QPoint(99,65),0)); //remove these when you have actual data
     data->push_back(DataPoint(QPoint(115,117),0));
-    data->push_back(DataPoint(QPoint(35,138),0)); //remove these when you have actual data
-    data->push_back(DataPoint(QPoint(93,274),0));
-    data->push_back(DataPoint(QPoint(47,274),0)); //remove these when you have actual data
+    data->push_back(DataPoint(QPoint(35,158),0)); //remove these when you have actual data
+    data->push_back(DataPoint(QPoint(93,214),0));
+    data->push_back(DataPoint(QPoint(47,244),0)); //remove these when you have actual data
     data->push_back(DataPoint(QPoint(85,324),0));
    // for(int i  = 0; i < 4; i++)
    //     data->push_back(DataPoint());
@@ -73,12 +73,16 @@ void Communication::update(){
             break;
         case 'f': dataSet(5);
             break;
-        default: q.pop();
+        default:
+           //  cout<<"bad byte "<<q.front()<<endl;
+             q.pop();
+
+           // cout<<"bad byte "<<endl;
             break;
         }
 
         fudgeFix++;
-        if (fudgeFix > 12){
+        if (fudgeFix > 20){
             int qsz = q.size();
             for(int i = 0; i < qsz; i++)
                 q.pop();
@@ -123,6 +127,7 @@ void Communication::readData(){
     read += size;
 
     for(int i = 0; i < size; i++){
+        //cout<<msg[i]<<endl;
         q.push(msg[i]);
     }
 
@@ -134,14 +139,28 @@ void Communication::readData(){
         return;
     }
 
-    if(read % 6 != 0) //data will be a 6 byte packet
+    findFront(read);
+
+    if(q.size() % 6 != 0){ //data will be a 6 byte packet
+
         readData();
-    else{
-        //    valNum = read / 3;
-        read = 0;
+
     }
+
 }
 
 vector<DataPoint>* Communication::getData(){
     return data;
+}
+
+void Communication::findFront(int &size){
+    if(q.size() > 0){
+
+        if (q.front() != 'a' || q.front() != 'b' || q.front() != 'c' | q.front() != 'd' || q.front() != 'e' || q.front() != 'f'){
+           q.pop();
+
+           findFront(size);
+        }
+    }
+
 }

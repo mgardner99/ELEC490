@@ -74,6 +74,7 @@ private:
     void leftArrowSlot();
     void rightArrowSlot();
     void on_vidStop_clicked();
+    void on_comPortBox_activated(const QString &arg1);
 };
 
 #endif // MAINWINDOW_H
