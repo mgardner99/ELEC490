@@ -25,8 +25,13 @@ QStringList Communication::getPortsList(){
 Communication::~Communication(){
 
     port->close();
+
     delete port;
     io->stop();
+   // while(!io->stopped()){
+
+  //  }
+
     delete io;
 
     delete data;
@@ -46,8 +51,9 @@ Communication::Communication(string comPort): q(){
     data->push_back(DataPoint(QPoint(93,214),0));
     data->push_back(DataPoint(QPoint(47,244),0)); //remove these when you have actual data
     data->push_back(DataPoint(QPoint(85,324),0));
-   // for(int i  = 0; i < 4; i++)
-   //     data->push_back(DataPoint());
+
+    if(port->is_open())
+    cout<<"Opened "<<comPort<<endl;
 }
 
 void Communication::update(){
@@ -74,10 +80,8 @@ void Communication::update(){
         case 'f': dataSet(5);
             break;
         default:
-           //  cout<<"bad byte "<<q.front()<<endl;
              q.pop();
 
-           // cout<<"bad byte "<<endl;
             break;
         }
 
@@ -107,44 +111,41 @@ void Communication::dataSet(int sense){
             return;
     }
     q.pop();
-  //  cout<<ss.str()<<endl;
+
     if(ss.rdbuf()->in_avail()>0)
         data->at(sense).setVal(atoi(ss.str().c_str()));
 }
 
 //fairly convoluted way of reading the incoming datastream from the arduino... YAY
 void Communication::readData(){
-    static int read = 0;
+   // static int read = 0;
     static int size = 0;
 
     try{
         size = port->read_some(buffer(msg,512));
+
     }
     catch(...){
         //fixes a crash where if the thread terminates the program dies
     }
 
-    read += size;
+
 
     for(int i = 0; i < size; i++){
-        //cout<<msg[i]<<endl;
         q.push(msg[i]);
     }
 
-    if(read > 100){
+    if(q.size() > 100){
         for (int i = 0; i < q.size(); i++)
             q.pop();
-        read = 0;
         cout<<"Over Flow"<<endl;
         return;
     }
 
-    findFront(read);
+    findFront(); //when the transmission is recieved the first time, you can get a middle of a packet.
 
-    if(q.size() % 6 != 0){ //data will be a 6 byte packet
-
+    if(q.size() < 6){ //data will be a 6 byte packet
         readData();
-
     }
 
 }
@@ -153,13 +154,12 @@ vector<DataPoint>* Communication::getData(){
     return data;
 }
 
-void Communication::findFront(int &size){
+void Communication::findFront(){
     if(q.size() > 0){
 
-        if (q.front() != 'a' || q.front() != 'b' || q.front() != 'c' | q.front() != 'd' || q.front() != 'e' || q.front() != 'f'){
+        if ((q.front() != 'a') && (q.front() != 'b') && (q.front() != 'c') && (q.front() != 'd') && (q.front() != 'e') && (q.front() != 'f')){
            q.pop();
-
-           findFront(size);
+           findFront();
         }
     }
 

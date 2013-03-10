@@ -46,7 +46,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //timer for comm thread
     QTimer* timer2 = new QTimer(this);
     connect(timer2, SIGNAL(timeout()), commThread, SLOT(start()));
-    timer2->start(100);
+    timer2->start(10);
 
     //timer for video ticker
     QTimer* timer3 = new QTimer(this);
@@ -57,18 +57,18 @@ MainWindow::MainWindow(QWidget *parent) :
     footMask.load("c:/leftFootMask.png");
     scene = new QGraphicsScene(); //create empty scene
 
-
-    vec = new vector<DataPoint>();
-    vec->push_back(DataPoint(QPoint(150,150),0)); //remove these when you have actual data
-    vec->push_back(DataPoint(QPoint(250,250),0));
-    vec = comm->getData();
+    //vec = comm->getData();
+    vec = new vector<DataPoint>;
+    //cout<<"before"<<endl;
     m.genMap(*vec);
+   // cout<<"after"<<endl;
     scene->setSceneRect(m.rect()); //set the scene's view rectangle to the image's
     pix = QPixmap::fromImage(m); //create a pixmap from the image
     pix = pix.scaled(ui->renderView->size());
     pixItem =  scene->addPixmap(pix); //add the pixmap to the scene
     ui->renderView->setSceneRect(pix.rect()); //set the renderviews view rectangle
     ui->renderView->setScene(scene); //set the renderViews scene
+    commThread->start();
 }
 
 //update called from timer thread to lock frame rate
@@ -95,18 +95,28 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_comPortBox_currentIndexChanged(const QString &arg1)
 {
+
+    currentComPort = arg1;
+    changeCom();
+
+
+}
+void MainWindow::changeCom(){
     if(comm != 0){
-        delete comm;
+        cout<<"com open already - killing"<<endl;
         commThread->terminate();
+        delete comm;
         comm = 0;
     }
-    cout<<"Called"<<arg1.toStdString()<<endl;
-    comm = new Communication(arg1.toStdString());
+//    cout<<"Called"<<arg1.toStdString()<<endl;
+    comm = new Communication(currentComPort.toStdString());
     comm->moveToThread(commThread);
     connect(commThread, SIGNAL(started()), comm, SLOT(update()));
     commThread->start();
     vec = comm->getData(); //pass data pointer
 }
+
+
 
 void MainWindow::on_vidPlay_clicked()
 {
@@ -179,7 +189,8 @@ void MainWindow::leftArrowSlot(){
 
 void MainWindow::rightArrowSlot(){
     if(!vidPlayer->isPlaying())
-    vidPlayer->seek(vidPlayer->currentTime()+33);
+        if(vidPlayer->currentTime() +33 < vidPlayer->totalTime())
+        vidPlayer->seek(vidPlayer->currentTime() + 33);
 }
 
 void MainWindow::on_vidStop_clicked()
@@ -189,6 +200,29 @@ void MainWindow::on_vidStop_clicked()
 }
 
 void MainWindow::on_comPortBox_activated(const QString &arg1)
+{/*
+     //cout<<"Called"<<arg1.toStdString()<<endl;
+    if(comm != 0){
+        cout<<"com open already - killing"<<endl;
+        commThread->terminate();
+        delete comm;
+        comm = 0;
+    }
+    else{
+    }
+    for(int i = 0; i < 1; i ++){
+    comm = new Communication(arg1.toStdString());
+    comm->moveToThread(commThread);
+    connect(commThread, SIGNAL(started()), comm, SLOT(update()));
+    commThread->start();
+    vec = comm->getData(); //pass data pointer
+    }
+    cout<<"opened " << arg1.toStdString()<<endl;*/
+}
+
+void MainWindow::on_fileBrowserButton_clicked()
 {
-  //  on_comPortBox_currentIndexChanged(arg1);
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"));
+    ui->vidPath->setText(fileName);
+    vidPathText = fileName;
 }

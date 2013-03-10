@@ -32,7 +32,7 @@ private:
     void readData();
     void dataSet(int sense);
     bool mutex;
-    void findFront(int &size);
+    void findFront();
 
 public slots:
     void update();

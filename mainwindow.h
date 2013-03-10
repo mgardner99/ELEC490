@@ -23,6 +23,7 @@
 #include <phonon/phonon>
 #include <QThread>
 #include <QShortcut>
+#include <QFileDialog>
 
 namespace Ui {
 class MainWindow;
@@ -56,6 +57,8 @@ private:
     QShortcut *leftArrow;
     QShortcut *rightArrow;
 
+    QString currentComPort;
+
 
     void uiInit();
 
@@ -75,6 +78,10 @@ private:
     void rightArrowSlot();
     void on_vidStop_clicked();
     void on_comPortBox_activated(const QString &arg1);
+
+
+    void changeCom();
+    void on_fileBrowserButton_clicked();
 };
 
 #endif // MAINWINDOW_H

@@ -18,6 +18,8 @@ HeatMap::HeatMap(QSize size, QImage::Format form):QImage(size,form){
 
 void HeatMap::genMap(vector<DataPoint> vec){
     float radius[vec.size()];
+    static int maxV;
+    maxV = 1;
     fill(QColor(255, 255, 255, 255)); //blank out the picture
 
     QPainter paint(this); //if i try to save the initialization and make it a class var, the program crashes... compiler bug?
@@ -26,6 +28,8 @@ void HeatMap::genMap(vector<DataPoint> vec){
     for (int i = 0; i < vec.size(); i++){
         radius[i] = RADC*vec[i].getVal();
         //R = Px * C
+        if(vec[i].getVal() > maxV)
+            maxV = vec[i].getVal();
     }
 
     QPen g_pen(QColor(0, 0, 0, 0));
@@ -36,7 +40,7 @@ void HeatMap::genMap(vector<DataPoint> vec){
 
         //cout<<vec[i].getVal()<<endl;
         QRadialGradient grad(vec[i].getLocation(), radius[i]); // Create Gradient
-        grad.setColorAt(0, QColor(0, 0, 0, 255)); //This is the one I need to change when we have real data to make it relative to our formula
+        grad.setColorAt(0, QColor(0, 0, 0, (vec[i].getVal()/(float)maxV)*255)); //This is the one I need to change when we have real data to make it relative to our formula
         grad.setColorAt(1, QColor(0, 0, 0, 0)); // Black, completely transparent
         QBrush g_brush(grad); // Gradient QBrush
         paint.setBrush(g_brush);

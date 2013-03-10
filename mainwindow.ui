@@ -178,11 +178,14 @@
     </property>
    </widget>
    <widget class="QLineEdit" name="vidPath">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>200</x>
       <y>560</y>
-      <width>331</width>
+      <width>231</width>
       <height>20</height>
      </rect>
     </property>
@@ -363,6 +366,19 @@
     </property>
     <property name="text">
      <string>Stop</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="fileBrowserButton">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>560</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Browse</string>
     </property>
    </widget>
   </widget>
