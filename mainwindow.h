@@ -36,9 +36,6 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    
-
-private:
     Ui::MainWindow *ui;
     HeatMap m;
     vector<DataPoint>* vec;
@@ -64,6 +61,7 @@ private:
 
  private slots:
     void update();
+    void commTimer();
     void vidTime();
     void on_comPortBox_currentIndexChanged(const QString &arg1);
 
@@ -82,6 +80,7 @@ private:
 
     void changeCom();
     void on_fileBrowserButton_clicked();
+    void on_MainWindow_destroyed();
 };
 
 #endif // MAINWINDOW_H

@@ -21,11 +21,11 @@ HEADERS  += mainwindow.h \
     heatmap.h \
     Communication.h
 
-INCLUDEPATH += "C:/boost_1_52_0"
+INCLUDEPATH += "C:/boost_1_53_0"
 
 
 
-LIBS += "c:\boost_1_52_0\stage\lib\libboost_system-mgw46-mt-1_52.a"
+LIBS += "c:\boost_1_53_0\stage\lib\libboost_system-mgw46-mt-1_53.a"
 LIBS += "C:\MinGW\lib\libws2_32.a"
 
 FORMS    += mainwindow.ui

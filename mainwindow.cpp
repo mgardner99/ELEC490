@@ -45,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //timer for comm thread
     QTimer* timer2 = new QTimer(this);
-    connect(timer2, SIGNAL(timeout()), commThread, SLOT(start()));
+    connect(timer2, SIGNAL(timeout()), this, SLOT(commTimer()));
     timer2->start(10);
 
     //timer for video ticker
@@ -73,6 +73,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 //update called from timer thread to lock frame rate
 void MainWindow::update(){
+
     m.genMap(*vec);
     m.applyMask(footMask);
     scene->removeItem(pixItem);
@@ -80,7 +81,6 @@ void MainWindow::update(){
     pix = QPixmap::fromImage(m);
     pixItem = scene->addPixmap(pix);
 }
-
 
 
 void MainWindow::uiInit(){
@@ -101,6 +101,11 @@ void MainWindow::on_comPortBox_currentIndexChanged(const QString &arg1)
 
 
 }
+void MainWindow::commTimer(){
+    if(!commThread->isRunning())
+    commThread->start();
+}
+
 void MainWindow::changeCom(){
     if(comm != 0){
         cout<<"com open already - killing"<<endl;
@@ -225,4 +230,9 @@ void MainWindow::on_fileBrowserButton_clicked()
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"));
     ui->vidPath->setText(fileName);
     vidPathText = fileName;
+}
+
+void MainWindow::on_MainWindow_destroyed()
+{
+    cout<<"Exit"<<endl;
 }

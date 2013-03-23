@@ -23,23 +23,25 @@ QStringList Communication::getPortsList(){
     return ports;
 }
 Communication::~Communication(){
-
+    cout<<"coms killed"<<endl;
     port->close();
-
+    file<<endl<<"end";
+    file.close();
     delete port;
     io->stop();
-   // while(!io->stopped()){
+    // while(!io->stopped()){
 
-  //  }
+    //  }
 
     delete io;
 
     delete data;
 }
 
-Communication::Communication(string comPort): q(){
+Communication::Communication(string comPort): q(),file("C:\\Users\\Joey\\Documents\\logOutput.log",ios::out){
     mutex = false;
-
+    file<<"begin"<<endl;
+    //file("c:/logOutput.log");
     io = new io_service();
     port = new serial_port(*io,comPort);
     port->set_option(serial_port_base::baud_rate(9600));
@@ -53,12 +55,13 @@ Communication::Communication(string comPort): q(){
     data->push_back(DataPoint(QPoint(85,324),0));
 
     if(port->is_open())
-    cout<<"Opened "<<comPort<<endl;
+        cout<<"Opened "<<comPort<<endl;
 }
 
 void Communication::update(){
     if(mutex == true)
         return; //mutex WOOT
+    cout<<"in update"<<endl;
     mutex = true;
 
     readData();
@@ -80,8 +83,8 @@ void Communication::update(){
         case 'f': dataSet(5);
             break;
         default:
-             q.pop();
-
+            q.pop();
+            cout<<"THIS SHOULDNT BE HERE!!!"<<endl;
             break;
         }
 
@@ -95,59 +98,87 @@ void Communication::update(){
         }
     }
     mutex = false;
+    cout<<"out update"<<endl;
 }
 
 void Communication::dataSet(int sense){
     stringstream ss;
-
+    ss<<0;
+    cout<<"in dataSet"<<endl;
+    if(q.size() != 0)
     q.pop();
+    cout<<"before while"<<endl;
     while(q.front() != 'z'){ // 'z' is the end packet footer
         if(q.size() == 0)
             return;
-
+        cout<<"getting q head"<<endl;
         ss<<q.front();
+        cout<<"got q head"<<endl;
+        if(q.size()!=0)
         q.pop();
+        cout<<q.size()<<endl;
         if(q.size() == 0)
             return;
     }
-    q.pop();
+    cout<<"after while"<<endl;
 
+    if(q.size()!=0)
+        q.pop();
+    cout<<"pre string stream"<<endl;
     if(ss.rdbuf()->in_avail()>0)
         data->at(sense).setVal(atoi(ss.str().c_str()));
+    cout<<"post string stream "<<ss.str().c_str()<<endl;
+    cout<<"out dataSet"<<endl;
 }
 
 //fairly convoluted way of reading the incoming datastream from the arduino... YAY
 void Communication::readData(){
-   // static int read = 0;
+    cout<<"in read data"<<endl;
+    // static int read = 0;
     static int size = 0;
 
     try{
+        cout<<"reading data"<<endl;
         size = port->read_some(buffer(msg,512));
-
+        cout<<"data read"<<endl;
     }
     catch(...){
         //fixes a crash where if the thread terminates the program dies
     }
 
 
-
+    cout<<"pushing data"<<endl;
     for(int i = 0; i < size; i++){
         q.push(msg[i]);
+        if(msg[i]== 'a'){
+            file<<endl;
+            file<<time(NULL);
+        }
+        file<<msg[i];
     }
+    cout<<"data pushed"<<endl;
 
+    cout<<"checking overflow"<<endl;
     if(q.size() > 100){
-        for (int i = 0; i < q.size(); i++)
+        int qsize =q.size();
+        cout<<"inner loop 1"<<endl;
+        for (int i = 0; i < qsize; i++){
+            cout<<"inner loop 2"<<endl;
             q.pop();
+        }
         cout<<"Over Flow"<<endl;
         return;
     }
+    cout<<"checked overflow"<<endl;
 
+    cout<<"finding front"<<endl;
     findFront(); //when the transmission is recieved the first time, you can get a middle of a packet.
+    cout<<"front found"<<endl;
 
     if(q.size() < 6){ //data will be a 6 byte packet
         readData();
     }
-
+    cout<<"out read data"<<endl;
 }
 
 vector<DataPoint>* Communication::getData(){
@@ -158,8 +189,8 @@ void Communication::findFront(){
     if(q.size() > 0){
 
         if ((q.front() != 'a') && (q.front() != 'b') && (q.front() != 'c') && (q.front() != 'd') && (q.front() != 'e') && (q.front() != 'f')){
-           q.pop();
-           findFront();
+            q.pop();
+            findFront();
         }
     }
 

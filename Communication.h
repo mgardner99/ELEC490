@@ -8,6 +8,8 @@
 #include <queue>
 #include <sstream>
 #include <QStringList>
+#include <fstream>
+#include <time.h>
 
 using namespace std;
 using namespace boost::asio;
@@ -28,7 +30,7 @@ private:
     vector<DataPoint>* data;
     queue<char> q;
    // int valNum;
-
+    fstream file;
     void readData();
     void dataSet(int sense);
     bool mutex;
