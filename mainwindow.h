@@ -20,10 +20,11 @@
 #include <QTimer>
 #include "DataPoint.h"
 #include "Communication.h"
-#include <phonon/phonon>
+//#include <phonon/phonon> //defunct
 #include <QThread>
 #include <QShortcut>
 #include <QFileDialog>
+//
 
 namespace Ui {
 class MainWindow;
@@ -46,8 +47,8 @@ public:
     QImage footMask;
     QThread* commThread;
     Communication* comm;
-    Phonon::VideoPlayer *vidPlayer;
-    Phonon::SeekSlider *vidSeek;
+    //Phonon::VideoPlayer *vidPlayer;
+    //Phonon::SeekSlider *vidSeek;
     bool vidLoaded;
     QString vidPathText;
 

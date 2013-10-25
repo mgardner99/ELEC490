@@ -26,7 +26,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QGridLayout *grid = new QGridLayout(ui->vidWidget);
     grid->setSpacing(20);
-    vidPlayer = new Phonon::VideoPlayer(Phonon::VideoCategory, ui->vidWidget);
+    vidPlayer = new VidPlayer(ui->vidWidget); //parent for video player is ui->vidWidget
+ /*   vidPlayer = new Phonon::VideoPlayer(Phonon::VideoCategory, ui->vidWidget);
     grid->addWidget(vidPlayer,1,0,3,1);
     vidLoaded = false;
 
@@ -54,7 +55,7 @@ MainWindow::MainWindow(QWidget *parent) :
     timer3->start(10);
 
 
-    footMask.load("c:/leftFootMask.png");
+    footMask.load("c:/Users/Megan/Documents/GitHub/ELEC490/leftFootMask.png"); // location of foot mask
     scene = new QGraphicsScene(); //create empty scene
 
     //vec = comm->getData();
@@ -69,6 +70,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->renderView->setSceneRect(pix.rect()); //set the renderviews view rectangle
     ui->renderView->setScene(scene); //set the renderViews scene
     commThread->start();
+    */
 }
 
 //update called from timer thread to lock frame rate
@@ -189,7 +191,7 @@ void MainWindow::on_vidEndLoopSet_clicked()
 
 void MainWindow::leftArrowSlot(){
     if(!vidPlayer->isPlaying())
-    vidPlayer->seek(vidPlayer->currentTime()-33);
+    vidPlayer->seek(vidPlayer->currentTime()-33); // Why is 33?
 }
 
 void MainWindow::rightArrowSlot(){
