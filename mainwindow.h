@@ -24,11 +24,17 @@
 #include <QThread>
 #include <QShortcut>
 #include <QFileDialog>
-//
+#include <QMultimedia>
+#include <QtWidgets>
+#include <QtMultimediaWidgets>
+
 
 namespace Ui {
 class MainWindow;
 }
+
+class QGraphicsVideoItem;
+class QSlider;
 
 class MainWindow : public QMainWindow
 {
@@ -43,19 +49,22 @@ public:
     QPixmap pix;
     QGraphicsScene *scene;
     QGraphicsItem* pixItem;
-    float fudger;
+    float fudger; // what is this "fudger" for?
     QImage footMask;
     QThread* commThread;
     Communication* comm;
-    //Phonon::VideoPlayer *vidPlayer;
-    //Phonon::SeekSlider *vidSeek;
+    //Phonon::VideoPlayer *vidPlayer; - defunct
+    //Phonon::SeekSlider *vidSeek; - defunct
     bool vidLoaded;
     QString vidPathText;
-
+    QMediaPlayer mediaPlayer;
+    QSlider *vidSeek;
     QShortcut *leftArrow;
     QShortcut *rightArrow;
 
     QString currentComPort;
+
+    QGraphicsVideoItem *videoItem;
 
 
     void uiInit();
